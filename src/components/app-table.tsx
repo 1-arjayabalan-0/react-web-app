@@ -75,8 +75,6 @@ function EnhancedTableHead(props) {
     onRequestSort(event, property);
   };
 
-  console.log(headCells);
-
   return (
     <TableHead>
       <TableRow>
@@ -86,6 +84,7 @@ function EnhancedTableHead(props) {
               <TableCell padding="checkbox">
                 <Checkbox
                   color="primary"
+                  key={headCell.id}
                   indeterminate={numSelected > 0 && numSelected < rowCount}
                   checked={rowCount > 0 && numSelected === rowCount}
                   onChange={onSelectAllClick}
@@ -194,16 +193,16 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function AppTable() {
+export default function AppTable(props) {
+  const { rows } = props;
+  console.log(rows);
+
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("calories");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(true);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  // Table Data
-  const [rows, setRows] = useState([]);
 
   // Table Editor
   const [pageInfo, setPageInfo] = useState({
@@ -262,16 +261,6 @@ export default function AppTable() {
   });
 
   // XX Table Editor
-
-  useEffect(() => {
-    let usersData: any;
-    const getAllUsers = async () => {
-      usersData = await getUsers();
-      console.log(usersData);
-      setRows(usersData.data);
-    };
-    getAllUsers();
-  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -376,7 +365,7 @@ export default function AppTable() {
                       return (
                         <>
                           {a.checkBox && (
-                            <TableCell padding="checkbox">
+                            <TableCell key={a.id} padding="checkbox">
                               <Checkbox
                                 color="primary"
                                 checked={isItemSelected}
@@ -386,7 +375,9 @@ export default function AppTable() {
                               />
                             </TableCell>
                           )}
-                          {!a.checkBox && <TableCell>{row[a.id]}</TableCell>}
+                          {!a.checkBox && (
+                            <TableCell key={a.id}>{row[a.id]}</TableCell>
+                          )}
                         </>
                       );
                     })}

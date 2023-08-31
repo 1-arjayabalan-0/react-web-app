@@ -1,4 +1,6 @@
 import axios from "axios";
+
+
 var token
 if (typeof window !== 'undefined') {
     token = localStorage.getItem("token") || ""
