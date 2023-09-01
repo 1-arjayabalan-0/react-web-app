@@ -10,7 +10,7 @@ export const getUsers = (): ThunkResult<AnyAction>  => {
   return (dispatch, getState) => {
     return new Promise(async (resolve: any, reject: any) => {
       await api
-        .get("/users")
+        .get("/Users")
         .then((res) => {
           resolve(res);
         })
@@ -24,7 +24,7 @@ export const postUsers = (payload): ThunkResult<any> => {
   return async (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {
       await api
-        .post("/users", payload)
+        .post("/Users", payload)
         .then((res) => {
           resolve(res);
         })
@@ -38,7 +38,7 @@ export const updateUsers = (payload) => {
   return (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {
       await api
-        .put("/users", payload)
+        .put("/Users", payload)
         .then((res) => {
           resolve(res);
         })

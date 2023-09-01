@@ -17,6 +17,9 @@ import {
   FormHelperText,
   FormControl,
   Dialog,
+  Grid,
+  Paper,
+  Typography,
 } from "@mui/material";
 import { Formik, useFormik } from "formik";
 import { useLocation } from "react-router-dom";
@@ -45,13 +48,18 @@ export const FormComp = ({
   const formik: any = useFormik({
     initialValues: formConfig.initialValues,
     validationSchema: formConfig.validationSchema,
-    onSubmit: (values, event) => {
+    onSubmit: (values, event: any) => {
+      event.preventDefault()
+      console.log("value", values);
+
       if (filter === true) {
         filtertransferdata(values);
       } else {
         if (action === "Edit") {
           Edittransferdata(values);
         } else {
+          console.log("value");
+
           transferdata(values);
         }
       }
@@ -67,26 +75,13 @@ export const FormComp = ({
 
   const handleSelect = (name, value, e) => {
     formik.setFieldValue(name, e);
-
-    if (
-      e === "select" ||
-      e === "multiselect" ||
-      e === "check" ||
-      e === "radiobutton"
-    ) {
+    console.log("asd", e, value);
+    if (e == "Superadmin") {
       changeschema({
         action: true,
         name: name,
         value: e,
       });
-    } else {
-      if (filter === false) {
-        changeschema({
-          action: false,
-          name: name,
-          value: e,
-        });
-      }
     }
   };
   const handleToggle = (name, value) => {
@@ -327,30 +322,56 @@ export const FormComp = ({
 
   return (
     <Container maxWidth="xl">
-      <Stack spacing={3}>
-        <Box maxWidth={"700px"} width={"100%"} margin={"auto"} padding={"20px"}>
-          <form onSubmit={formik.handleSubmit}>
-            <div>
-              {formConfig.controls.map((control) => (
-                <Box key={control.name} paddingBottom={"15px"}>
-                  {renderControl(control)}
-                </Box>
-              ))}
-
-              <Button
-                onClick={() => {
-                  back();
-                }}
+      <Paper elevation={16} sx={{ padding: 3 }}>
+        {formConfig.formSection.map((control) => (
+          <>
+            <Typography gutterBottom variant="h5" component="div">
+              {control.formSectionTitle}
+            </Typography>
+            <Stack spacing={3}>
+              <Box
+                maxWidth={"700px"}
+                width={"100%"}
+                margin={"auto"}
+                padding={"20px"}
               >
-                Cancel
-              </Button>
-              <Button type="submit">Submit</Button>
-            </div>
-          </form>
-        </Box>
-      </Stack>
+                <form>
+                  <div>
+                    <Grid
+                      container
+                      spacing={{ xs: 2, md: 3 }}
+                      columns={{ xs: 4, sm: 8, md: 12 }}
+                    >
+                      {control.controls.map((control) => (
+                        <Grid
+                          item
+                          xs={2}
+                          sm={4}
+                          md={control.name == "role" ? 8 : 4}
+                          key={control.name}
+                        >
+                          <Box key={control.name} paddingBottom={"15px"}>
+                            {renderControl(control)}
+                          </Box>
+                        </Grid>
+                      ))}
+                    </Grid>
 
-
+                    {/* <Button
+                      onClick={() => {
+                        back();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit">Submit</Button> */}
+                  </div>
+                </form>
+              </Box>
+            </Stack>
+          </>
+        ))}
+      </Paper>
     </Container>
   );
 };

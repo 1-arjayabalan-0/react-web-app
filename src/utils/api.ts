@@ -9,7 +9,7 @@ let axiosInstance = axios.create({
 
     // baseURL: apinfo.api_url,
     //http://64.227.166.30:8001
-    baseURL: "https://jsonplaceholder.typicode.com",
+    baseURL: "https://64f061398a8b66ecf7798c3c.mockapi.io/api",
     timeout: 180000,
 
 });

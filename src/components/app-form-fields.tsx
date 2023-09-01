@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { Box, Card, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  Container,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -10,6 +18,8 @@ import { AppLayout } from "../layouts/app-layout";
 import { UsersYup } from "../validations/app-validations";
 import { getUsers, updateUsers, postUsers } from "../redux/actions/users";
 
+import { images } from "../utils/image-exports";
+
 const AppForm = () => {
   const dispatch: any = useDispatch();
   const router = useNavigate();
@@ -19,7 +29,7 @@ const AppForm = () => {
   let action = routes.get("action");
   let id = routes.get("id");
   console.log(module, action, id);
-  
+
   // let { module, action, id, name, type, email } = route.query;
   let form_type = ["applied", "training", "earning"];
   let [loadform, setloadform] = useState(false);
@@ -39,106 +49,193 @@ const AppForm = () => {
     },
     validationSchema: UsersYup,
     onSubmit: async (values) => {},
-    controls: [
+    formSection: [
       {
-        type: "text",
-        name: "name",
-        label: "Name",
-        disable: false,
-        required: true,
-      },
-      {
-        type: "text",
-        name: "email",
-        label: "Email",
-        disable: false,
-        required: true,
-      },
-      {
-        type: "text",
-        name: "password",
-        label: "Password",
-        disable: false,
-        required: true,
-      },
-      {
-        type: "textarea",
-        name: "address",
-        label: "Address",
-        disable: false,
-        required: true,
-      },
-      {
-        type: "text",
-        name: "phone_number",
-        label: "Phone Number",
-        disable: false,
-        required: true,
-      },
-      // {
-      //     type: 'text',
-      //     name: 'dob',
-      //     label: 'D.O.B',
-      //     disable: false,
-      //     required: false
-      // },
-      {
-        type: "select",
-        name: "role",
-        label: "Role",
-        options: [
+        formSectionTitle: "Basic Information",
+        controls: [
           {
-            label: "Admin",
-            value: "Admin",
+            type: "text",
+            name: "name",
+            label: "Name",
+            disable: false,
+            required: true,
+          },
+          {
+            type: "text",
+            name: "avatar",
+            label: "Avatar",
+            disable: false,
+            required: true,
+          },
+          {
+            type: "text",
+            name: "username",
+            label: "User Name",
+            disable: false,
+            required: true,
+          },
+          {
+            type: "text",
+            name: "email",
+            label: "Email",
+            disable: false,
+            required: true,
+          },
+          {
+            type: "text",
+            name: "phone",
+            label: "Phone",
+            disable: false,
+            required: true,
+          },
+          {
+            type: "text",
+            name: "website",
+            label: "Website",
+            disable: false,
+            required: true,
+          },
+          {
+            type: "text",
+            name: "company",
+            label: "Company",
+            disable: false,
+            required: true,
+          },
+          {
+            type: "",
+            name: "",
+            label: "",
+            disable: false,
+            required: false,
+          },
+          {
+            type: "select",
+            name: "role",
+            label: "Role",
+            options: [
+              {
+                label: "Admin",
+                value: "Admin",
+              },
+            ],
+            disable: false,
+            required: true,
+          },
+          {
+            type: "select",
+            name: "user_group",
+            label: "User Group",
+            options: [
+              {
+                label: "Superadmin",
+                value: "Superadmin",
+              },
+            ],
+            disable: false,
+            required: true,
+          },
+          {
+            type: "address",
+            name: "address",
+            label: "Address",
+            disable: false,
+            required: false,
           },
         ],
-        disable: false,
-        required: true,
       },
       {
-        type: "select",
-        name: "user_group",
-        label: "User Group",
-        options: [
+        formSectionTitle: "Complex Information",
+        controls: [
           {
-            label: "Superadmin",
-            value: "Superadmin",
+            type: "text",
+            name: "name",
+            label: "Name",
+            disable: false,
+            required: true,
+          },
+
+          {
+            type: "text",
+            name: "email",
+            label: "Email",
+            disable: false,
+            required: true,
+          },
+          {
+            type: "text",
+            name: "phone",
+            label: "Phone",
+            disable: false,
+            required: true,
+          },
+
+          {
+            type: "address",
+            name: "address",
+            label: "Address",
+            disable: false,
+            required: false,
           },
         ],
-        disable: false,
-        required: true,
       },
     ],
   });
   // Users
 
   useEffect(() => {
-    if (module === "Users") {
-      setloadform(true);
+    switch (module) {
+      case "Users":
+        if (action === "Edit" || action === "Create") {
+          console.log(module);
 
-      if (action === "Edit" || action === "Create") {
-        if (action === "Edit") {
-          getapidata();
+          if (action === "Edit") {
+            console.log(module);
+
+            getapidata();
+          }
+          if (module === "Users" && action === "Create") {
+            // function
+            console.log(module);
+            loadSchemeData();
+          } else if (action === "Create") {
+            console.log(module);
+
+            setloadform(true);
+          }
+        } else {
+          router("/404");
         }
-        if (module === "Users" && action === "Create") {
-          // function
-        } else if (action === "Create") {
-          setloadform(true);
-        }
-      } else {
-        router("/404");
-      }
-    } else {
-      router("/404");
     }
+    // if (module === "Users") {
+    //   if (action === "Edit" || action === "Create") {
+    //     if (action === "Edit") {
+    //       getapidata();
+    //     }
+    //     if (module === "Users" && action === "Create") {
+    //       // function
+    //     } else if (action === "Create") {
+    //       setloadform(true);
+    //     }
+    //   } else {
+    //     router("/404");
+    //   }
+    // } else {
+    //   router("/404");
+    // }
   }, []);
+
+  const loadSchemeData = async () => {
+    switch (module) {
+      case "Users":
+        setloadform(true);
+    }
+  };
 
   const getapidata = async () => {
     if (module === "Users") {
-      let usersFetch = await dispatch(
-        getUsers()
-        )
-        
+      let usersFetch = await dispatch(getUsers());
+
       if (usersFetch.status === 200) {
         setuserformConfig((set) => {
           let obj = usersFetch.data.data[0];
@@ -186,52 +283,65 @@ const AppForm = () => {
     }
   };
   const transferdata = async (data: any) => {
-    if (module === "Users") {
-      const date = new Date();
-      const options: any = { year: "numeric", month: "long", day: "numeric" };
-      const formattedDate = date.toLocaleDateString("en-US", options);
+    switch (module) {
+      case "Users":
+        const date = new Date();
+        const options: any = { year: "numeric", month: "long", day: "numeric" };
+        const formattedDate = date.toLocaleDateString("en-US", options);
 
-      data.dob = formattedDate;
-      let userCreate = await dispatch(postUsers(data));
-      if (userCreate.status === 201) {
-        back();
-      }
+        data.dob = formattedDate;
+        let userCreate = await dispatch(postUsers(data));
+        if (userCreate.status === 201) {
+          back();
+        }
     }
+    // if (module === "Users") {
+    //   const date = new Date();
+    //   const options: any = { year: "numeric", month: "long", day: "numeric" };
+    //   const formattedDate = date.toLocaleDateString("en-US", options);
+
+    //   data.dob = formattedDate;
+    //   let userCreate = await dispatch(postUsers(data));
+    //   if (userCreate.status === 201) {
+    //     back();
+    //   }
+    // }
   };
   const back = () => {
-    if (module === "Users" || module === "UsersPassword") {
-      router("/user");
+    if (module === "Users") {
+      router("/");
     }
   };
 
-  //   const changeschema = (value) => {
-  //     setjobformConfig((set) => {
-  //       let condition = "";
-  //       if (value.name === "init_test_need") {
-  //         condition = "init_test_form_id";
-  //         set.initialValues["init_test_need"] = false;
-  //         set.initialValues["init_test_form_id"] = "";
-  //       }
-  //       if (value.name === "is_training_test_need") {
-  //         condition = "training_test_form_id";
-  //         set.initialValues["is_training_test_need"] = false;
-  //         set.initialValues["training_test_form_id"] = "";
-  //       }
-  //       if (value.name === "custome_flow") {
-  //         condition = "custom_router";
-  //         set.initialValues["custome_flow"] = false;
-  //         set.initialValues["custom_router"] = "";
-  //       }
-  //       let arr = set.controls.map((elm) => {
-  //         if (elm.name === condition) {
-  //           elm.disable = !value.action;
-  //         }
-  //         return elm;
-  //       });
-  //       set.controls = arr;
-  //       return set;
-  //     });
-  //   };
+  const changeschema = (value) => {
+    setuserformConfig((set: any) => {
+      set.formSection.map((formSecInfo) => {
+        let arr = formSecInfo.controls.map((ele) => {
+          console.log(ele);
+          console.log(value);
+
+          console.log(ele["name"] == "user_group");
+          console.log(value);
+
+          if (value["value"] == "Superadmin") {
+            console.log("element", ele["name"]);
+            if (ele["name"] == "password") {
+              ele.disable = true;
+            }
+          }
+          console.log(ele.disable);
+
+          return ele;
+        });
+        set.controls = arr;
+      });
+      return set;
+    });
+  };
+
+  const handleSubmit = () => {
+    
+  }
 
   return (
     <>
@@ -246,10 +356,33 @@ const AppForm = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">
+                <Typography variant="h6">
                   {action} {module}
                 </Typography>
               </Stack>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  "& > *": {
+                    m: 1,
+                  },
+                }}
+              >
+                <ButtonGroup size="small" aria-label="small button group">
+                  <Button key="one" onClick={() => handleSubmit}>Save</Button>
+                </ButtonGroup>
+                <ButtonGroup
+                  color="secondary"
+                  aria-label="medium secondary button group"
+                >
+                  <Button key="one">Cancel</Button>
+                </ButtonGroup>
+                <ButtonGroup size="large" aria-label="large button group">
+                  <Button key="one">Search</Button>
+                </ButtonGroup>
+              </Box>
             </Stack>
             {loadform && (
               //   <Card spacing={3}>
@@ -261,7 +394,7 @@ const AppForm = () => {
                   formConfig={module === "Users" ? userformConfig : ""}
                   filter={undefined}
                   filtertransferdata={undefined}
-                  changeschema={undefined}
+                  changeschema={changeschema}
                 />
               </>
               //   </Card>
@@ -272,7 +405,5 @@ const AppForm = () => {
     </>
   );
 };
-
-
 
 export default AppForm;

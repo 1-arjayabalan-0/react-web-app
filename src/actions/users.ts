@@ -4,7 +4,7 @@ export function getUsers() {
 //   return (dispatch, setState) => {
     return new Promise(async (resolve, reject) => {
       await api
-        .get("/users")
+        .get("/Users")
         .then((res) => {
           resolve(res);
         })
