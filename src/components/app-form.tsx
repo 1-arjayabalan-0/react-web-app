@@ -20,11 +20,12 @@ import {
   Grid,
   Paper,
   Typography,
+  ButtonGroup,
 } from "@mui/material";
 import { Formik, useFormik } from "formik";
 import { useLocation } from "react-router-dom";
 
-export const FormComp = ({
+const FormComp: any = ({
   formConfig,
   transferdata,
   back,
@@ -32,7 +33,11 @@ export const FormComp = ({
   Edittransferdata,
   filter,
   filtertransferdata,
+  forwardedRef,
 }) => {
+  React.useImperativeHandle(forwardedRef, () => ({
+    handleSubmit,
+  }));
   const [open, setOpen] = useState({});
   const [imgSource, setImgSource] = useState({
     img: "",
@@ -49,7 +54,7 @@ export const FormComp = ({
     initialValues: formConfig.initialValues,
     validationSchema: formConfig.validationSchema,
     onSubmit: (values, event: any) => {
-      event.preventDefault()
+      event.preventDefault();
       console.log("value", values);
 
       if (filter === true) {
@@ -65,6 +70,7 @@ export const FormComp = ({
       }
     },
   });
+
   const handleClose = () => {
     setImgSource({
       img: "",
@@ -110,6 +116,11 @@ export const FormComp = ({
         });
       }
     }
+  };
+
+  const handleSubmit = (values) => {
+    formik.handleSubmit();
+    console.log(formik.values);
   };
 
   const renderControl = (controlConfig) => {
@@ -323,19 +334,24 @@ export const FormComp = ({
   return (
     <Container maxWidth="xl">
       <Paper elevation={16} sx={{ padding: 3 }}>
-        {formConfig.formSection.map((control) => (
-          <>
-            <Typography gutterBottom variant="h5" component="div">
-              {control.formSectionTitle}
-            </Typography>
-            <Stack spacing={3}>
-              <Box
-                maxWidth={"700px"}
-                width={"100%"}
-                margin={"auto"}
-                padding={"20px"}
-              >
-                <form>
+        {/* <ButtonGroup size="small" aria-label="large button group">
+          <Button onClick={handleSubmit} key="one">
+            Save
+          </Button>
+        </ButtonGroup> */}
+        <form onSubmit={formik.handleSubmit}>
+          {formConfig.formSection.map((control) => (
+            <>
+              <Typography gutterBottom variant="h5" component="div">
+                {control.formSectionTitle}
+              </Typography>
+              <Stack spacing={3}>
+                <Box
+                  maxWidth={"700px"}
+                  width={"100%"}
+                  margin={"auto"}
+                  padding={"20px"}
+                >
                   <div>
                     <Grid
                       container
@@ -366,12 +382,27 @@ export const FormComp = ({
                     </Button>
                     <Button type="submit">Submit</Button> */}
                   </div>
-                </form>
-              </Box>
-            </Stack>
-          </>
-        ))}
+                </Box>
+              </Stack>
+            </>
+          ))}
+        </form>
       </Paper>
     </Container>
   );
 };
+
+export default React.forwardRef((props: any, ref) => {
+  return (
+    <FormComp
+      back={props.back}
+      Edittransferdata={props.Edittransferdata}
+      transferdata={props.transferdata}
+      formConfig={props.formConfig}
+      filter={props.filter}
+      filtertransferdata={props.filtertransferdata}
+      changeschema={props.changeschema}
+      forwardedRef={ref}
+    />
+  );
+});

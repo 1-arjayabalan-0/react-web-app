@@ -8,7 +8,7 @@ import {
   BrowserRouter,
 } from "react-router-dom";
 import { AppLayout } from "./layouts/app-layout";
-import Users from "./pages/Auth/users";
+import Users from "./pages/Auth/Users";
 import AppForm from "./components/app-form-fields";
 import { Provider } from "react-redux";
 import store from "./actions/store/store";

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 
-import { FormComp } from "./app-form";
+import FormComp from "./app-form";
 import { AppLayout } from "../layouts/app-layout";
 import { UsersYup } from "../validations/app-validations";
 import { getUsers, updateUsers, postUsers } from "../redux/actions/users";
@@ -28,7 +28,8 @@ const AppForm = () => {
   let module = routes.get("module");
   let action = routes.get("action");
   let id = routes.get("id");
-  console.log(module, action, id);
+
+  const formRef: any = useRef();
 
   // let { module, action, id, name, type, email } = route.query;
   let form_type = ["applied", "training", "earning"];
@@ -187,20 +188,12 @@ const AppForm = () => {
     switch (module) {
       case "Users":
         if (action === "Edit" || action === "Create") {
-          console.log(module);
-
           if (action === "Edit") {
-            console.log(module);
-
             getapidata();
           }
           if (module === "Users" && action === "Create") {
-            // function
-            console.log(module);
             loadSchemeData();
           } else if (action === "Create") {
-            console.log(module);
-
             setloadform(true);
           }
         } else {
@@ -230,6 +223,11 @@ const AppForm = () => {
       case "Users":
         setloadform(true);
     }
+  };
+
+  const handleSubmitVal = () => {
+
+    formRef.current.handleSubmit();
   };
 
   const getapidata = async () => {
@@ -317,19 +315,11 @@ const AppForm = () => {
     setuserformConfig((set: any) => {
       set.formSection.map((formSecInfo) => {
         let arr = formSecInfo.controls.map((ele) => {
-          console.log(ele);
-          console.log(value);
-
-          console.log(ele["name"] == "user_group");
-          console.log(value);
-
           if (value["value"] == "Superadmin") {
-            console.log("element", ele["name"]);
             if (ele["name"] == "password") {
               ele.disable = true;
             }
           }
-          console.log(ele.disable);
 
           return ele;
         });
@@ -338,10 +328,6 @@ const AppForm = () => {
       return set;
     });
   };
-
-  const handleSubmit = () => {
-    
-  }
 
   return (
     <>
@@ -363,7 +349,7 @@ const AppForm = () => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "row",
                   alignItems: "center",
                   "& > *": {
                     m: 1,
@@ -371,15 +357,18 @@ const AppForm = () => {
                 }}
               >
                 <ButtonGroup size="small" aria-label="small button group">
-                  <Button key="one" onClick={() => handleSubmit}>Save</Button>
+                  <Button key="one" onClick={() => handleSubmitVal()}>
+                    Save
+                  </Button>
                 </ButtonGroup>
                 <ButtonGroup
+                  size="small"
                   color="secondary"
                   aria-label="medium secondary button group"
                 >
                   <Button key="one">Cancel</Button>
                 </ButtonGroup>
-                <ButtonGroup size="large" aria-label="large button group">
+                <ButtonGroup size="small" aria-label="large button group">
                   <Button key="one">Search</Button>
                 </ButtonGroup>
               </Box>
@@ -395,6 +384,7 @@ const AppForm = () => {
                   filter={undefined}
                   filtertransferdata={undefined}
                   changeschema={changeschema}
+                  ref={formRef}
                 />
               </>
               //   </Card>
